@@ -24,14 +24,22 @@ namespace TestProject1RestSharp
             return response;
         }
         [TestMethod]
-        public void GivenEmployeeIdOnDelete_ShouldReturnSucessStatus()
+        public void OnCallingPostAPI_MultileEmployeesAdded()
         {
-            //arrange
-            RestRequest request = new RestRequest("/Employees/5", Method.Delete);
-            //act
-            RestResponse response = client.Execute(request);
-            //assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            List<Employees> EmpList = new List<Employees>();
+            EmpList.Add(new Employees("raj", 20000));
+            EmpList.Add(new Employees("ravi", 30000));
+            foreach (Employees emp in EmpList)
+            {
+                RestRequest request = new RestRequest("/Employees", Method.Post);
+                JsonObject jsonObjectbody = new JsonObject();
+                jsonObjectbody.Add("name", emp.name);
+                jsonObjectbody.Add("salary", emp.salary);
+                request.AddParameter("application/json", jsonObjectbody, ParameterType.RequestBody);
+                RestResponse response = client.Execute(request);
+                Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+            }
+                  
         }
     }
 }

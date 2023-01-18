@@ -8,8 +8,13 @@ namespace TestProject1RestSharp
 {
     internal class Employees
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int salary { get; set; }
+        public int id;
+        public string name;
+        public int salary;
+        public Employees(string name,int salary)
+        {
+            this.name = name;
+            this.salary = salary;
+        }      
     }
 }
