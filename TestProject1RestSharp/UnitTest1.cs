@@ -24,31 +24,22 @@ namespace TestProject1RestSharp
             return response;
         }
         [TestMethod]
-        public void OnCallingGetAPI_ReturnEmployeeList()
-        {
-            RestResponse response = GetEmployeeList();
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
-            List<Employees> employeeList = JsonConvert.DeserializeObject<List<Employees>>(response.Content);
-            Assert.AreEqual(5, employeeList.Count);
-            foreach (Employees emp in employeeList)
-            {
-                Console.WriteLine(emp.id + "\t" + emp.name + "\t" + emp.salary);
-            }
-        }
-        [TestMethod]
-        public void OnCallingPostAPI_PostEmployeeObject()
-        {
-            RestRequest request = new RestRequest("/Employees", Method.Post);
+        public void OnCallingPostAPI_Return_updateEmployee()
+        {   //arrange
+            RestRequest request = new RestRequest("/Employees/3", Method.Put);
             JsonObject jsonObjectbody = new JsonObject();
-            jsonObjectbody.Add("name", "ramya");
-            jsonObjectbody.Add("salary", 30000);
+
+            jsonObjectbody.Add("name", "JAIRAM");
+            jsonObjectbody.Add("salary", 600000);//salary changed
             request.AddParameter("application/json", jsonObjectbody, ParameterType.RequestBody);
+            //  act
             RestResponse response = client.Execute(request);
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+            // assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Employees employee = JsonConvert.DeserializeObject<Employees>(response.Content);
-            Assert.AreEqual("ramya", employee.name);
-            Assert.AreEqual(30000, employee.salary);
+            Assert.AreEqual("JAIRAM", employee.name);
+            Assert.AreEqual(600000, employee.salary);
         }
+
     }
 }
