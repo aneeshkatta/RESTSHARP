@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using System.Text.Json.Nodes;
 
 namespace TestProject1RestSharp
 {
@@ -34,6 +35,20 @@ namespace TestProject1RestSharp
             {
                 Console.WriteLine(emp.id + "\t" + emp.name + "\t" + emp.salary);
             }
+        }
+        [TestMethod]
+        public void OnCallingPostAPI_PostEmployeeObject()
+        {
+            RestRequest request = new RestRequest("/Employees", Method.Post);
+            JsonObject jsonObjectbody = new JsonObject();
+            jsonObjectbody.Add("name", "ramya");
+            jsonObjectbody.Add("salary", 30000);
+            request.AddParameter("application/json", jsonObjectbody, ParameterType.RequestBody);
+            RestResponse response = client.Execute(request);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+            Employees employee = JsonConvert.DeserializeObject<Employees>(response.Content);
+            Assert.AreEqual("ramya", employee.name);
+            Assert.AreEqual(30000, employee.salary);
         }
     }
 }
