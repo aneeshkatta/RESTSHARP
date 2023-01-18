@@ -24,22 +24,14 @@ namespace TestProject1RestSharp
             return response;
         }
         [TestMethod]
-        public void OnCallingPostAPI_Return_updateEmployee()
-        {   //arrange
-            RestRequest request = new RestRequest("/Employees/3", Method.Put);
-            JsonObject jsonObjectbody = new JsonObject();
-
-            jsonObjectbody.Add("name", "JAIRAM");
-            jsonObjectbody.Add("salary", 600000);//salary changed
-            request.AddParameter("application/json", jsonObjectbody, ParameterType.RequestBody);
-            //  act
+        public void GivenEmployeeIdOnDelete_ShouldReturnSucessStatus()
+        {
+            //arrange
+            RestRequest request = new RestRequest("/Employees/5", Method.Delete);
+            //act
             RestResponse response = client.Execute(request);
-            // assert
+            //assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            Employees employee = JsonConvert.DeserializeObject<Employees>(response.Content);
-            Assert.AreEqual("JAIRAM", employee.name);
-            Assert.AreEqual(600000, employee.salary);
         }
-
     }
 }
